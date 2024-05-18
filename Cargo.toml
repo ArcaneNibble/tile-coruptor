@@ -18,7 +18,14 @@ wasm-bindgen = "0.2.92"
 
 [dependencies.web-sys]
 version = "0.3.69"
-features = ["console"]
+features = [
+    "CanvasRenderingContext2d",
+    "console",
+    "Document",
+    "Element",
+    "HtmlCanvasElement",
+    "Window",
+]
 
 [target."cfg(debug_assertions)".dependencies]
 console_error_panic_hook = "0.1.7"

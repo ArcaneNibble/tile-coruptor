@@ -1,6 +1,9 @@
-use bitvec::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
+
+pub mod tile_codec;
+
+use crate::tile_codec::*;
 
 fn get_canvas_ctx() -> CanvasRenderingContext2d {
     let canvas = web_sys::window()
@@ -36,20 +39,9 @@ impl TileCorruptorAppInst {
     }
 
     pub fn foobar(&self) {
-        let ctx = get_canvas_ctx();
-        web_sys::console::log_1(&format!("fdsa {:?}", ctx).into());
-        ctx.set_fill_style(&"#000".into());
-        web_sys::console::log_2(&self.data.len().into(), &self.data[0].into());
-        let bv = self.data.view_bits::<Msb0>();
-        for y in 0..16 {
-            for x in 0..16 {
-                let bit_i = y * 16 + x;
-                let b = bv[bit_i];
-                if !b {
-                    ctx.fill_rect(x as f64 * 8.0, y as f64 * 8.0, 8.0, 8.0);
-                }
-            }
-        }
+        let codec_nes = NESGraphics::default();
+        let codec: &dyn TileCodec = &codec_nes;
+        codec.xxx_render(&self.data[0x8010..], 8, 8);
     }
 }
 

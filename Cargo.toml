@@ -14,6 +14,7 @@ crate-type = ["cdylib"]
 lto = true
 
 [dependencies]
+bitvec = "1"
 wasm-bindgen = "0.2.92"
 
 [dependencies.web-sys]

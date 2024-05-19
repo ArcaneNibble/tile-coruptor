@@ -49,9 +49,14 @@
             <button type="button" class="btn btn-primary" id="bit_m">Bit -</button>
             <button type="button" class="btn btn-primary" id="bit_p">Bit +</button>
         </div>
+        <div class="btn-group me-2" role="group" aria-label="Goto offset">
+            <input type="text" class="form-control" id="goto_offs_inp" placeholder="0x00000000[.b0]"
+                pattern="(0x)?[0-9A-Fa-f]+(\.b[0-7])?" />
+            <button type="button" class="btn btn-primary" id="goto_offs_btn">Goto</button>
+        </div>
     </div>
     <div class="row">
-        <canvas id="canvas" width="256" height="256"></canvas>
+        <canvas id="canvas" width="0" height="0"></canvas>
     </div>
     <footer class="fixed-bottom">
         <ul class="list-group list-group-horizontal">

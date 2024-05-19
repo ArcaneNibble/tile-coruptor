@@ -125,6 +125,15 @@ document.addEventListener("keydown", (e) => {
     }
 })
 
+document.getElementById("goto_offs_btn").addEventListener("click", (e) => {
+    let goto_addr_elem = document.getElementById("goto_offs_inp");
+    if (!goto_addr_elem.validity.valid)
+        return;
+    if (rust_app_inst === undefined)
+        return;
+    rust_app_inst.go_to_offset(goto_addr_elem.value);
+});
+
 document
     .getElementById("filechooser")
     .addEventListener("change", choose_new_file);

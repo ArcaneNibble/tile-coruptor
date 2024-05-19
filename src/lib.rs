@@ -48,7 +48,7 @@ impl TileCorruptorAppInst {
     pub fn new(data: &[u8]) -> Self {
         Self {
             data: data.to_owned(),
-            data_bit_off: 0x8010 * 8,
+            data_bit_off: 0,
             canvas: get_canvas(),
             ctx: get_canvas_ctx(),
             px_scale: 2.5,
@@ -259,6 +259,37 @@ impl TileCorruptorAppInst {
     }
     pub fn bit_plus(&mut self) {
         let new_off = self.data_bit_off + 1;
+        if new_off < self.data.len() * 8 {
+            self.data_bit_off = new_off;
+            self.render();
+            self.update_status_bar();
+        }
+    }
+
+    pub fn go_to_offset(&mut self, offs_str: &str) {
+        let (offs, bit) = if let Some((offs, bit_str)) = offs_str.split_once(".b") {
+            if let Ok(bit) = bit_str.parse::<u8>() {
+                (offs, bit)
+            } else {
+                return;
+            }
+        } else {
+            (offs_str, 0)
+        };
+
+        let offs = if let Some(offs) = offs.strip_prefix("0x") {
+            offs
+        } else {
+            offs
+        };
+
+        let offs = if let Ok(offs) = usize::from_str_radix(offs, 16) {
+            offs
+        } else {
+            return;
+        };
+
+        let new_off = offs * 8 + bit as usize;
         if new_off < self.data.len() * 8 {
             self.data_bit_off = new_off;
             self.render();

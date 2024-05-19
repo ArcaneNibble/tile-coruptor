@@ -9,12 +9,11 @@ import("../pkg/index.js").then((rust) => {
         let file_data_u8 = new Uint8Array(file_data);
 
         if (rust_app_inst !== undefined) {
-            console.log("free!");
             rust_app_inst.free();
         }
-        console.log("about to call rust", file_data_u8);
         rust_app_inst = new TileCorruptorAppInst(file_data_u8);
-        rust_app_inst.foobar();
+        rust_app_inst.resize();
+        rust_app_inst.render();
     }
 
     document

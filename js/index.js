@@ -15,7 +15,6 @@ for (const [codec_i, codec] of builtin_codecs.entries()) {
     let name = codec.i18n_name;
     if (CODEC_HUMAN_NAMES.has(name))
         name = CODEC_HUMAN_NAMES.get(name);
-    console.log(codec_i, name);
 
     let a_elem = document.createElement("a");
     a_elem.classList = "dropdown-item";
@@ -23,14 +22,19 @@ for (const [codec_i, codec] of builtin_codecs.entries()) {
     a_elem.innerText = name;
 
     a_elem.addEventListener("click", (e) => {
-        if (rust_app_inst !== undefined)
+        if (rust_app_inst !== undefined) {
             rust_app_inst.change_codec(codec_i);
+            document.getElementById("cur_codec").innerText = name;
+        }
     });
 
     let li_elem = document.createElement("li");
     li_elem.appendChild(a_elem);
 
     codecs_menu.appendChild(li_elem);
+
+    if (codec_i == 0)
+        document.getElementById("cur_codec").innerText = name;
 }
 
 async function choose_new_file(e) {

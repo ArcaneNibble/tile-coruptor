@@ -535,7 +535,8 @@ impl TileCorruptorAppInst {
                 tile_codec,
                 ..
             } => {
-                let bits_per_row = tile_codec.bits_per_tile() * tiles_width;
+                let bits_per_row =
+                    tile_codec.bits_per_tile() * tiles_width * if faster { 8 } else { 1 };
                 if self.data_bit_off >= bits_per_row {
                     self.data_bit_off -= bits_per_row;
                 } else {
@@ -563,7 +564,8 @@ impl TileCorruptorAppInst {
                 tile_codec,
                 ..
             } => {
-                let new_off = self.data_bit_off + tile_codec.bits_per_tile() * tiles_width;
+                let new_off = self.data_bit_off
+                    + tile_codec.bits_per_tile() * tiles_width * if faster { 8 } else { 1 };
                 if new_off < self.data.len() * 8 {
                     self.data_bit_off = new_off;
                 }

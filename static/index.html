@@ -7,9 +7,39 @@
     <script src="index.js"></script>
 </head>
 
-<body>
-    <div>Open file: <input class="btn btn-primary" type="file" id="filechooser" /></div>
-    <canvas id="canvas" width="256" height="256"></canvas>
+<body class="container-fluid">
+    <nav class="row navbar navbar-expand bg-primary mb-2">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">File</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" id="file_open" href="#">Open</a></li>
+                        <li><a class="dropdown-item" href="#">asdf</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#">asdf</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">fdsa</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="btn-toolbar mb-2" role="toolbar" aria-label="Sizing toolbar">
+        <div class="btn-group me-2" role="group" aria-label="Width">
+            <button type="button" class="btn btn-primary" id="gfx_w_m">Width -</button>
+            <button type="button" class="btn btn-primary" id="gfx_w_p">Width +</button>
+        </div>
+        <div class="btn-group" role="group" aria-label="Height">
+            <button type="button" class="btn btn-primary" id="gfx_h_m">Height -</button>
+            <button type="button" class="btn btn-primary" id="gfx_h_p">Height +</button>
+        </div>
+    </div>
+    <div class="row">
+        <canvas id="canvas" width="256" height="256"></canvas>
+    </div>
+    <div class="hidden-stuff">
+        <input type="file" id="filechooser" />
+    </div>
 </body>
 
 </html>

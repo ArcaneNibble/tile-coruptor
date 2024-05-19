@@ -17,6 +17,27 @@ async function choose_new_file(e) {
     rust_app_inst.render();
 }
 
+document.getElementById("file_open").addEventListener("click", (e) => {
+    document.getElementById("filechooser").click();
+});
+
+document.getElementById("gfx_w_m").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined)
+        rust_app_inst.width_minus();
+});
+document.getElementById("gfx_w_p").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined)
+        rust_app_inst.width_plus();
+});
+document.getElementById("gfx_h_m").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined)
+        rust_app_inst.height_minus();
+});
+document.getElementById("gfx_h_p").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined)
+        rust_app_inst.height_plus();
+});
+
 document
     .getElementById("filechooser")
     .addEventListener("change", choose_new_file);

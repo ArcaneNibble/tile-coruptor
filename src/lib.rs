@@ -96,6 +96,35 @@ impl TileCorruptorAppInst {
             self.tiles_height,
         );
     }
+
+    pub fn width_minus(&mut self) {
+        if self.is_tiled_mode && self.tiles_width > 1 {
+            self.tiles_width -= 1;
+            self.resize();
+            self.render();
+        }
+    }
+    pub fn width_plus(&mut self) {
+        if self.is_tiled_mode {
+            self.tiles_width += 1;
+            self.resize();
+            self.render();
+        }
+    }
+    pub fn height_minus(&mut self) {
+        if self.is_tiled_mode && self.tiles_height > 1 {
+            self.tiles_height -= 1;
+            self.resize();
+            self.render();
+        }
+    }
+    pub fn height_plus(&mut self) {
+        if self.is_tiled_mode {
+            self.tiles_height += 1;
+            self.resize();
+            self.render();
+        }
+    }
 }
 
 impl AbstractPixelTarget for TileCorruptorAppInst {

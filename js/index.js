@@ -1,8 +1,37 @@
 import '../styles/style.scss'
 import * as bootstrap from 'bootstrap';
-import { TileCorruptorAppInst } from '../pkg/index.js';
+import { TileCorruptorAppInst, wasm_get_builtin_graphics_codecs } from '../pkg/index.js';
 
 let rust_app_inst = undefined;
+
+const CODEC_HUMAN_NAMES = new Map([
+    ["nes", "2bpp planar, non-interleaved (NES)"],
+    ["gb", "2bpp planar, row-interleaved (GB)"],
+]);
+
+let builtin_codecs = wasm_get_builtin_graphics_codecs();
+let codecs_menu = document.getElementById("codecs_menu");
+for (const [codec_i, codec] of builtin_codecs.entries()) {
+    let name = codec.i18n_name;
+    if (CODEC_HUMAN_NAMES.has(name))
+        name = CODEC_HUMAN_NAMES.get(name);
+    console.log(codec_i, name);
+
+    let a_elem = document.createElement("a");
+    a_elem.classList = "dropdown-item";
+    a_elem.href = "#";
+    a_elem.innerText = name;
+
+    a_elem.addEventListener("click", (e) => {
+        if (rust_app_inst !== undefined)
+            rust_app_inst.change_codec(codec_i);
+    });
+
+    let li_elem = document.createElement("li");
+    li_elem.appendChild(a_elem);
+
+    codecs_menu.appendChild(li_elem);
+}
 
 async function choose_new_file(e) {
     let file = e.target.files[0];
@@ -22,6 +51,23 @@ async function choose_new_file(e) {
 
 document.getElementById("file_open").addEventListener("click", (e) => {
     document.getElementById("filechooser").click();
+});
+
+document.getElementById("file_export").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined) {
+        let bytes = rust_app_inst.export_png();
+        let blob = new Blob([bytes], { type: "image/png" });
+        let url = URL.createObjectURL(blob);
+
+        let download_elem = document.createElement("a");
+        download_elem.style = "display: none;";
+        download_elem.href = url;
+        download_elem.download = "export.png";
+        document.body.appendChild(download_elem);
+        download_elem.click();
+        URL.revokeObjectURL(url);
+        document.body.removeChild(download_elem);
+    }
 });
 
 document.getElementById("gfx_w_m").addEventListener("click", (e) => {

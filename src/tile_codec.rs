@@ -5,9 +5,17 @@ use crate::AbstractPixelTarget;
 
 pub trait TileCodec {
     fn num_palette_colors(&self) -> usize;
+    fn bits_per_tile(&self) -> usize;
     fn tile_width(&self) -> usize;
     fn tile_height(&self) -> usize;
-    fn render(&self, r: &dyn AbstractPixelTarget, bytes: &[u8], tiles_w: usize, tiles_h: usize);
+    fn render(
+        &self,
+        r: &dyn AbstractPixelTarget,
+        bytes: &[u8],
+        bit_offs: u8,
+        tiles_w: usize,
+        tiles_h: usize,
+    );
 }
 
 #[derive(Clone, Copy, Debug, Default)]
@@ -48,6 +56,14 @@ impl<
         1 << (PLANES - 1)
     }
 
+    fn bits_per_tile(&self) -> usize {
+        let data_bits_per_row = TILE_W + TILE_W_PAD;
+        let data_bits_per_plane = data_bits_per_row * TILE_H + PLANE_PAD;
+        let data_bits_per_tile = data_bits_per_plane * PLANES + FINAL_PAD;
+
+        data_bits_per_tile
+    }
+
     fn tile_width(&self) -> usize {
         TILE_W
     }
@@ -56,7 +72,14 @@ impl<
         TILE_H
     }
 
-    fn render(&self, r: &dyn AbstractPixelTarget, bytes: &[u8], tiles_w: usize, tiles_h: usize) {
+    fn render(
+        &self,
+        r: &dyn AbstractPixelTarget,
+        bytes: &[u8],
+        bit_offs: u8,
+        tiles_w: usize,
+        tiles_h: usize,
+    ) {
         debug_assert!(PLANES <= 8);
         let bits = bytes.view_bits::<DataBitOrder>();
 
@@ -72,7 +95,8 @@ impl<
                         let mut px = [0u8; 1];
                         let px_bv = px.view_bits_mut::<PlaneBitOrder>();
                         for plane in 0..PLANES {
-                            let bit_idx = tile_i * data_bits_per_tile
+                            let bit_idx = bit_offs as usize
+                                + tile_i * data_bits_per_tile
                                 + plane * data_bits_per_plane
                                 + px_y * data_bits_per_row
                                 + px_x;

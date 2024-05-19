@@ -15,6 +15,7 @@ lto = true
 
 [dependencies]
 bitvec = "1"
+console_error_panic_hook = "0.1.7"
 wasm-bindgen = "0.2.92"
 
 [dependencies.web-sys]
@@ -27,9 +28,6 @@ features = [
     "HtmlCanvasElement",
     "Window",
 ]
-
-[target."cfg(debug_assertions)".dependencies]
-console_error_panic_hook = "0.1.7"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.42"

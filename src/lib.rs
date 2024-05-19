@@ -107,6 +107,29 @@ impl TileCorruptorAppInst {
         };
 
         file_offs_elem.set_inner_text((*file_offs).into());
+
+        let gfx_dims_elem = web_sys::window()
+            .unwrap()
+            .document()
+            .unwrap()
+            .get_element_by_id("gfx_dims")
+            .unwrap()
+            .dyn_into::<HtmlElement>()
+            .unwrap();
+
+        let gfx_dims = if self.is_tiled_mode {
+            format!(
+                "{} x {} tiles ({} x {} px)",
+                self.tiles_width,
+                self.tiles_height,
+                self.tiles_width * self.tile_codec.tile_width(),
+                self.tiles_height * self.tile_codec.tile_height()
+            )
+        } else {
+            todo!()
+        };
+
+        gfx_dims_elem.set_inner_text((*gfx_dims).into());
     }
 
     pub fn render(&self) {
@@ -131,6 +154,7 @@ impl TileCorruptorAppInst {
             self.tiles_width -= 1;
             self.resize();
             self.render();
+            self.update_status_bar();
         }
     }
     pub fn width_plus(&mut self) {
@@ -138,6 +162,7 @@ impl TileCorruptorAppInst {
             self.tiles_width += 1;
             self.resize();
             self.render();
+            self.update_status_bar();
         }
     }
     pub fn height_minus(&mut self) {
@@ -145,6 +170,7 @@ impl TileCorruptorAppInst {
             self.tiles_height -= 1;
             self.resize();
             self.render();
+            self.update_status_bar();
         }
     }
     pub fn height_plus(&mut self) {
@@ -152,6 +178,7 @@ impl TileCorruptorAppInst {
             self.tiles_height += 1;
             self.resize();
             self.render();
+            self.update_status_bar();
         }
     }
 

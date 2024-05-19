@@ -76,6 +76,55 @@ document.getElementById("bit_p").addEventListener("click", (e) => {
         rust_app_inst.bit_plus();
 });
 
+document.addEventListener("keydown", (e) => {
+    if (rust_app_inst === undefined)
+        return;
+
+    if (!e.altKey) {
+        if (e.key == "ArrowLeft" && !e.shiftKey) {
+            rust_app_inst.tile_minus();
+            e.preventDefault();
+        }
+        if (e.key == "ArrowRight" && !e.shiftKey) {
+            rust_app_inst.tile_plus();
+            e.preventDefault();
+        }
+        if (e.key == "ArrowLeft" && e.shiftKey) {
+            rust_app_inst.byte_minus();
+            e.preventDefault();
+        }
+        if (e.key == "ArrowRight" && e.shiftKey) {
+            rust_app_inst.byte_plus();
+            e.preventDefault();
+        }
+        if (e.key == "ArrowUp") {
+            rust_app_inst.row_minus();
+            e.preventDefault();
+        }
+        if (e.key == "ArrowDown") {
+            rust_app_inst.row_plus();
+            e.preventDefault();
+        }
+    } else {
+        if (e.key == "ArrowLeft") {
+            rust_app_inst.width_minus();
+            e.preventDefault();
+        }
+        if (e.key == "ArrowRight") {
+            rust_app_inst.width_plus();
+            e.preventDefault();
+        }
+        if (e.key == "ArrowUp") {
+            rust_app_inst.height_minus();
+            e.preventDefault();
+        }
+        if (e.key == "ArrowDown") {
+            rust_app_inst.height_plus();
+            e.preventDefault();
+        }
+    }
+})
+
 document
     .getElementById("filechooser")
     .addEventListener("change", choose_new_file);

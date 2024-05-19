@@ -5,8 +5,11 @@ import { TileCorruptorAppInst, wasm_get_builtin_graphics_codecs } from '../pkg/i
 let rust_app_inst = undefined;
 
 const CODEC_HUMAN_NAMES = new Map([
-    ["nes", "2bpp planar, non-interleaved (NES)"],
-    ["gb", "2bpp planar, row-interleaved (GB)"],
+    ["nes", "Tiled, 2bpp planar, non-interleaved (NES)"],
+    ["gb", "Tiled, 2bpp planar, row-interleaved (GB)"],
+    ["lin-1bpp-msbfirst", "Non-tiled, 1bpp, MSB->LSB"],
+    ["lin-1bpp-lsbfirst", "Non-tiled, 1bpp, LSB->MSB"],
+
 ]);
 
 let builtin_codecs = wasm_get_builtin_graphics_codecs();

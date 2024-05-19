@@ -78,7 +78,7 @@ impl<
     >
 {
     fn num_palette_colors(&self) -> usize {
-        1 << (PLANES - 1)
+        1 << PLANES
     }
 
     fn bits_per_tile(&self) -> usize {
@@ -194,7 +194,7 @@ impl<
     >
 {
     fn num_palette_colors(&self) -> usize {
-        1 << (PLANES - 1)
+        1 << PLANES
     }
 
     fn bits_per_tile(&self) -> usize {

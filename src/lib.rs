@@ -1,8 +1,12 @@
+use std::borrow::Cow;
+
 use wasm_bindgen::prelude::*;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlElement};
 
 pub mod linear_codec;
 pub mod tile_codec;
+
+pub mod palette;
 
 use crate::linear_codec::*;
 use crate::tile_codec::*;
@@ -44,9 +48,8 @@ impl<'a> AbstractPixelTarget for CanvasPixelWriter<'a> {
     }
 
     fn draw_px_pal(&mut self, x: usize, y: usize, i: u8) {
-        // TODO
-        let color = i << 6;
-        self.draw_px_rgb(x, y, color, color, color);
+        let color = self.app.pal[i as usize];
+        self.draw_px_rgb(x, y, color.0, color.1, color.2);
     }
 }
 
@@ -126,6 +129,7 @@ enum TileCorruptorTiledOrLinear {
 pub struct TileCorruptorAppInst {
     data: Vec<u8>,
     data_bit_off: usize,
+    pal: Cow<'static, [(u8, u8, u8)]>,
     canvas: HtmlCanvasElement,
     ctx: CanvasRenderingContext2d,
     px_scale: f64,
@@ -138,6 +142,7 @@ impl TileCorruptorAppInst {
         Self {
             data: data.to_owned(),
             data_bit_off: 0,
+            pal: (&palette::DEFAULT_PAL).into(),
             canvas: get_canvas(),
             ctx: get_canvas_ctx(),
             px_scale: 2.5,
@@ -338,9 +343,9 @@ impl TileCorruptorAppInst {
                     // TODO custom palettes
                     let mut pal = Vec::with_capacity(3 * 256);
                     for i in 0..256 {
-                        pal.push((i << 6) as u8);
-                        pal.push((i << 6) as u8);
-                        pal.push((i << 6) as u8);
+                        pal.push(self.pal[i].0);
+                        pal.push(self.pal[i].1);
+                        pal.push(self.pal[i].2);
                     }
                     png_encoder.set_palette(pal);
                     pixels = vec![0u8; w * h];
@@ -378,9 +383,9 @@ impl TileCorruptorAppInst {
                     // TODO custom palettes
                     let mut pal = Vec::with_capacity(3 * 256);
                     for i in 0..256 {
-                        pal.push((i << 6) as u8);
-                        pal.push((i << 6) as u8);
-                        pal.push((i << 6) as u8);
+                        pal.push(self.pal[i].0);
+                        pal.push(self.pal[i].1);
+                        pal.push(self.pal[i].2);
                     }
                     png_encoder.set_palette(pal);
                     pixels = vec![0u8; width * height];

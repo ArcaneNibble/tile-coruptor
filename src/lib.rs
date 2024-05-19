@@ -160,9 +160,11 @@ impl TileCorruptorAppInst {
             let bits_per_tile = self.tile_codec.bits_per_tile();
             if self.data_bit_off >= bits_per_tile {
                 self.data_bit_off -= bits_per_tile;
-                self.render();
-                self.update_status_bar();
+            } else {
+                self.data_bit_off = 0;
             }
+            self.render();
+            self.update_status_bar();
         }
     }
     pub fn tile_plus(&mut self) {
@@ -173,6 +175,36 @@ impl TileCorruptorAppInst {
                 self.render();
                 self.update_status_bar();
             }
+        }
+    }
+
+    pub fn row_minus(&mut self) {
+        if self.is_tiled_mode {
+            let bits_per_row = self.tile_codec.bits_per_tile() * self.tiles_width;
+            if self.data_bit_off >= bits_per_row {
+                self.data_bit_off -= bits_per_row;
+            } else {
+                self.data_bit_off = 0;
+            }
+            self.render();
+            self.update_status_bar();
+        } else {
+            todo!()
+        }
+    }
+    pub fn row_plus(&mut self) {
+        if self.is_tiled_mode {
+            if self.is_tiled_mode {
+                let new_off =
+                    self.data_bit_off + self.tile_codec.bits_per_tile() * self.tiles_width;
+                if new_off < self.data.len() * 8 {
+                    self.data_bit_off = new_off;
+                    self.render();
+                    self.update_status_bar();
+                }
+            }
+        } else {
+            todo!()
         }
     }
 

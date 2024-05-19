@@ -41,6 +41,15 @@ document.getElementById("gfx_h_p").addEventListener("click", (e) => {
         rust_app_inst.height_plus();
 });
 
+document.getElementById("row_m").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined)
+        rust_app_inst.row_minus();
+});
+document.getElementById("row_p").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined)
+        rust_app_inst.row_plus();
+});
+
 document.getElementById("tile_m").addEventListener("click", (e) => {
     if (rust_app_inst !== undefined)
         rust_app_inst.tile_minus();

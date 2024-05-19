@@ -1,3 +1,6 @@
+import '../styles/style.scss'
+import * as bootstrap from 'bootstrap';
+
 import("../pkg/index.js").then((rust) => {
     const { TileCorruptorAppInst } = rust;
 

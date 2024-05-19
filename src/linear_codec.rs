@@ -41,7 +41,7 @@ impl<DataBitOrder: BitOrder, const BPP: usize, const PX_PAD: usize, const ROW_PA
     }
 
     fn bits_per_pixel(&self) -> usize {
-        BPP
+        BPP + PX_PAD
     }
 
     fn bits_per_row(&self, w: usize) -> usize {

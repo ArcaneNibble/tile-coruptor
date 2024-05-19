@@ -3,6 +3,7 @@ import * as bootstrap from 'bootstrap';
 import { TileCorruptorAppInst, wasm_get_builtin_graphics_codecs } from '../pkg/index.js';
 
 let rust_app_inst = undefined;
+let global_is_tiled = true;
 
 const CODEC_HUMAN_NAMES = new Map([
     ["nes", "Tiled, 2bpp planar, non-interleaved (NES)"],
@@ -16,6 +17,7 @@ let builtin_codecs = wasm_get_builtin_graphics_codecs();
 let codecs_menu = document.getElementById("codecs_menu");
 for (const [codec_i, codec] of builtin_codecs.entries()) {
     let name = codec.i18n_name;
+    let is_tiled = codec.is_tiled;
     if (CODEC_HUMAN_NAMES.has(name))
         name = CODEC_HUMAN_NAMES.get(name);
 
@@ -28,6 +30,15 @@ for (const [codec_i, codec] of builtin_codecs.entries()) {
         if (rust_app_inst !== undefined) {
             rust_app_inst.change_codec(codec_i);
             document.getElementById("cur_codec").innerText = name;
+            global_is_tiled = is_tiled;
+
+            if (global_is_tiled) {
+                document.getElementById("tile_pm_group").style.removeProperty("display");
+                document.getElementById("px_pm_group").style.setProperty("display", "none");
+            } else {
+                document.getElementById("tile_pm_group").style.setProperty("display", "none");
+                document.getElementById("px_pm_group").style.removeProperty("display");
+            }
         }
     });
 
@@ -112,6 +123,15 @@ document.getElementById("tile_p").addEventListener("click", (e) => {
         rust_app_inst.tile_plus();
 });
 
+document.getElementById("px_m").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined)
+        rust_app_inst.px_minus();
+});
+document.getElementById("px_p").addEventListener("click", (e) => {
+    if (rust_app_inst !== undefined)
+        rust_app_inst.px_plus();
+});
+
 document.getElementById("byte_m").addEventListener("click", (e) => {
     if (rust_app_inst !== undefined)
         rust_app_inst.byte_minus();
@@ -134,13 +154,24 @@ document.addEventListener("keydown", (e) => {
         return;
 
     if (!e.altKey) {
-        if (e.key == "ArrowLeft" && !e.shiftKey) {
-            rust_app_inst.tile_minus();
-            e.preventDefault();
-        }
-        if (e.key == "ArrowRight" && !e.shiftKey) {
-            rust_app_inst.tile_plus();
-            e.preventDefault();
+        if (global_is_tiled) {
+            if (e.key == "ArrowLeft" && !e.shiftKey) {
+                rust_app_inst.tile_minus();
+                e.preventDefault();
+            }
+            if (e.key == "ArrowRight" && !e.shiftKey) {
+                rust_app_inst.tile_plus();
+                e.preventDefault();
+            }
+        } else {
+            if (e.key == "ArrowLeft" && !e.shiftKey) {
+                rust_app_inst.px_minus();
+                e.preventDefault();
+            }
+            if (e.key == "ArrowRight" && !e.shiftKey) {
+                rust_app_inst.px_plus();
+                e.preventDefault();
+            }
         }
         if (e.key == "ArrowLeft" && e.shiftKey) {
             rust_app_inst.byte_minus();
@@ -151,11 +182,11 @@ document.addEventListener("keydown", (e) => {
             e.preventDefault();
         }
         if (e.key == "ArrowUp") {
-            rust_app_inst.row_minus();
+            rust_app_inst.row_minus(e.ctrlKey || e.metaKey);
             e.preventDefault();
         }
         if (e.key == "ArrowDown") {
-            rust_app_inst.row_plus();
+            rust_app_inst.row_plus(e.ctrlKey || e.metaKey);
             e.preventDefault();
         }
     } else {

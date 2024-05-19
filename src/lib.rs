@@ -505,7 +505,30 @@ impl TileCorruptorAppInst {
         }
     }
 
-    pub fn row_minus(&mut self) {
+    pub fn px_minus(&mut self) {
+        if let TileCorruptorTiledOrLinear::Linear { lin_codec, .. } = self.tiled_or_linear {
+            let bpp = lin_codec.bits_per_pixel();
+            if self.data_bit_off >= bpp {
+                self.data_bit_off -= bpp;
+            } else {
+                self.data_bit_off = 0;
+            }
+            self.render();
+            self.update_status_bar();
+        }
+    }
+    pub fn px_plus(&mut self) {
+        if let TileCorruptorTiledOrLinear::Linear { lin_codec, .. } = self.tiled_or_linear {
+            let new_off = self.data_bit_off + lin_codec.bits_per_pixel();
+            if new_off < self.data.len() * 8 {
+                self.data_bit_off = new_off;
+                self.render();
+                self.update_status_bar();
+            }
+        }
+    }
+
+    pub fn row_minus(&mut self, faster: bool) {
         match self.tiled_or_linear {
             TileCorruptorTiledOrLinear::Tiled {
                 tiles_width,
@@ -522,7 +545,7 @@ impl TileCorruptorAppInst {
             TileCorruptorTiledOrLinear::Linear {
                 width, lin_codec, ..
             } => {
-                let bits_per_row = lin_codec.bits_per_row(width);
+                let bits_per_row = lin_codec.bits_per_row(width) * if faster { 32 } else { 1 };
                 if self.data_bit_off >= bits_per_row {
                     self.data_bit_off -= bits_per_row;
                 } else {
@@ -533,7 +556,7 @@ impl TileCorruptorAppInst {
         self.render();
         self.update_status_bar();
     }
-    pub fn row_plus(&mut self) {
+    pub fn row_plus(&mut self, faster: bool) {
         match self.tiled_or_linear {
             TileCorruptorTiledOrLinear::Tiled {
                 tiles_width,
@@ -548,7 +571,8 @@ impl TileCorruptorAppInst {
             TileCorruptorTiledOrLinear::Linear {
                 width, lin_codec, ..
             } => {
-                let new_off = self.data_bit_off + lin_codec.bits_per_row(width);
+                let new_off =
+                    self.data_bit_off + lin_codec.bits_per_row(width) * if faster { 32 } else { 1 };
                 if new_off < self.data.len() * 8 {
                     self.data_bit_off = new_off;
                 }

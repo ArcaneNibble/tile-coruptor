@@ -94,6 +94,24 @@ pub const BUILTIN_GRAPHICS_CODECS: &[BuiltinGraphicsCodec] = &[
         lin_codec: None,
     },
     BuiltinGraphicsCodec {
+        i18n_name: "gba-4bpp",
+        is_tiled: true,
+        tile_codec: Some(&GBATileGraphics4bpp::new()),
+        lin_codec: None,
+    },
+    BuiltinGraphicsCodec {
+        i18n_name: "genesis-4bpp",
+        is_tiled: true,
+        tile_codec: Some(&GenesisGraphics4bpp::new()),
+        lin_codec: None,
+    },
+    BuiltinGraphicsCodec {
+        i18n_name: "tiled-8bpp",
+        is_tiled: true,
+        tile_codec: Some(&TileGraphics8bpp::new()),
+        lin_codec: None,
+    },
+    BuiltinGraphicsCodec {
         i18n_name: "lin-1bpp-msbfirst",
         is_tiled: false,
         tile_codec: None,

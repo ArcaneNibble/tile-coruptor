@@ -8,6 +8,9 @@ let global_is_tiled = true;
 const CODEC_HUMAN_NAMES = new Map([
     ["nes", "Tiled, 2bpp planar, non-interleaved (NES)"],
     ["gb", "Tiled, 2bpp planar, row-interleaved (GB)"],
+    ["gba-4bpp", "Tiled, 4bpp non-planar, LSB->MSB (GBA)"],
+    ["genesis-4bpp", "Tiled, 4bpp non-planar, MSB->LSB (Genesis)"],
+    ["tiled-8bpp", "Tiled, 8bpp non-planar (GBA, NDS)"],
     ["lin-1bpp-msbfirst", "Non-tiled, 1bpp, MSB->LSB"],
     ["lin-1bpp-lsbfirst", "Non-tiled, 1bpp, LSB->MSB"],
 

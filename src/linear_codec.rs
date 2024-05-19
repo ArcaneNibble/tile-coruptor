@@ -66,7 +66,7 @@ impl<DataBitOrder: BitOrder, const BPP: usize, const PX_PAD: usize, const ROW_PA
                 let mut px = [0u8; 1];
                 let px_bv = px.view_bits_mut::<Lsb0>();
                 for b_i in 0..BPP {
-                    let bit_idx = bit_offs as usize + y * data_bits_per_row + x;
+                    let bit_idx = bit_offs as usize + y * data_bits_per_row + x * BPP + b_i;
                     if bit_idx >= bits.len() {
                         return;
                     }

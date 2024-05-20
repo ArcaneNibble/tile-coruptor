@@ -5,6 +5,7 @@ version = "0.0.1"
 authors = ["R <rqou@berkeley.edu>"]
 categories = ["wasm"]
 readme = "README.md"
+license = "0BSD"
 edition = "2021"
 
 [lib]

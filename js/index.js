@@ -13,7 +13,6 @@ const CODEC_HUMAN_NAMES = new Map([
     ["tiled-8bpp", "Tiled, 8bpp non-planar (GBA, NDS)"],
     ["lin-1bpp-msbfirst", "Non-tiled, 1bpp, MSB->LSB"],
     ["lin-1bpp-lsbfirst", "Non-tiled, 1bpp, LSB->MSB"],
-
 ]);
 
 let builtin_codecs = wasm_get_builtin_graphics_codecs();

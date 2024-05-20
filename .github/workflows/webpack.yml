@@ -1,9 +1,11 @@
 name: NodeJS with Webpack
 
+permissions:
+  id-token: write
+  pages: write
+
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:

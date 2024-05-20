@@ -22,3 +22,9 @@ jobs:
       run: |
         npm install
         npx webpack
+
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: "dist/"
+
+    - uses: actions/deploy-pages@v4
